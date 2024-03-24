@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useDebugValue, useState } from 'react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -9,13 +9,8 @@ import {
 import LoginPage from './components/LoginPage';
 import LogoutPage from './components/LogoutPage';
 
-import { Layout, Menu, Button, theme } from 'antd';
+import { Layout, Menu, Button, theme, Modal } from 'antd';
 const { Header, Sider, Content, Footer } = Layout;
-
-const handleLogout = () => {
-   (<LogoutPage/>)
-}
-
 
 const App = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -23,38 +18,60 @@ const App = () => {
   const [email, setEmail]     = useState('');
   const [pass, setPass]       = useState('');
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleSair = (user) => {
+    SetUsuario(user)
+  }
+
   return (
     <>
+      {isModalOpen && (
+        <LogoutPage 
+          isModalOpen={isModalOpen} 
+          setIsModalOpen={setIsModalOpen}
+          handleSair={handleSair}/>
+      )}
       {usuario &&(
         <Layout>
         <Sider trigger={null} collapsible collapsed={collapsed}>
-          <div className="demo-logo-vertical" />
+          <div className="demo-logo-vertical" />          
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={['1']}
+            defaultSelectedKeys={['user']}
+            onClick={(value) =>{
+              if(value.key === 'sair'){                
+                showModal()
+              };
+            }}
             items={[
               {
-                key: '1',
+                key: 'user',
                 icon: <UserOutlined />,
                 label: 'Usuário',
               },
               {
-                key: '2',
+                key: 'cadastro',
                 icon: <VideoCameraOutlined />,
                 label: 'Cadastros',
               },
-              {
-                key: '3',
+              {                
+                key: 'sair',
                 icon: <UploadOutlined />,
-                label: 'Sair',
-                onClick: handleLogout()
+                label: 'Sair'
               },
             ]}
-          />
+          />         
+          
         </Sider>
         <Layout>
           <Header          
