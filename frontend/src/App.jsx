@@ -10,6 +10,7 @@ import LoginPage from './components/LoginPage';
 import LogoutPage from './components/LogoutPage';
 
 import { Layout, Menu, Button, theme, Modal } from 'antd';
+import FormUser from './components/FormUser';
 const { Header, Sider, Content, Footer } = Layout;
 
 const App = () => {
@@ -19,14 +20,19 @@ const App = () => {
   const [pass, setPass]       = useState('');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const showModal = () => {
-    setIsModalOpen(true);
+  const showModal = (setFunction) => {
+    setFunction(true);
   };
+
+  const handleCancelFormUser = (value) =>{
+    setOpen(value);
+  }
 
   const handleSair = (user) => {
     SetUsuario(user)
@@ -40,6 +46,12 @@ const App = () => {
           setIsModalOpen={setIsModalOpen}
           handleSair={handleSair}/>
       )}
+      {open && (
+        <FormUser 
+         open={open}
+         handleCancelFormUser={handleCancelFormUser}
+         />
+      )}
       {usuario &&(
         <Layout>
         <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -50,19 +62,42 @@ const App = () => {
             defaultSelectedKeys={['user']}
             onClick={(value) =>{
               if(value.key === 'sair'){                
-                showModal()
+                showModal(setIsModalOpen)
+              }else if (value.key === 'user'){
+                showModal(setOpen)
               };
             }}
             items={[
               {
-                key: 'user',
+                key: 'monitoramento',
                 icon: <UserOutlined />,
-                label: 'Usuário',
+                label: 'Monitoramento',
+              },
+              {
+                key: 'usuarios',
+                icon: <UserOutlined />,
+                label: 'Usuários',
+              },
+              {
+                key: 'culturas',
+                icon: <UserOutlined />,
+                label: 'Culturas',
               },
               {
                 key: 'cadastro',
                 icon: <VideoCameraOutlined />,
-                label: 'Cadastros',
+                label: 'Cadastro',
+                type: 'divider',
+                children: [{
+                  key: 'cultura',
+                  icon: <UserOutlined />,
+                  label: 'Cultura',
+                },
+                {
+                  key: 'user',
+                  icon: <UserOutlined />,
+                  label: 'Usuário',
+                }]
               },
               {                
                 key: 'sair',
