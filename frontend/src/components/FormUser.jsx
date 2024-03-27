@@ -2,32 +2,39 @@ import React, { useState } from 'react';
 import { Modal, Input } from 'antd';
 
 
-const FormUser = ({open, handleCancelFormUser}) => {
+const FormUser = ({open, handleCancelFormUser, email, setEmail, name, setName}) => {
 
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Content of the modal');
+  const [modalText, setModalText] = useState('Content of the modal');  
   
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const [repass, setRepass] = useState('');
 
+  let jsonUser;
+
   const handleOk = () => {
-    setModalText('The modal will be closed after two seconds');
+    handleSubmit();    
     setConfirmLoading(true);
     setTimeout(() => {
-      setOpen(false);
+      handleCancel;
       setConfirmLoading(false);
     }, 2000);
   };
 
   const handleCancel = () => {
+    setPass('');
+    setRepass('');
     handleCancelFormUser(false)
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(name);
+  const handleSubmit = () => {
+    jsonUser = {
+      name: name,
+      email: email,
+      pass: pass
+    }
+
+    console.log(jsonUser);
   }
 
   return (
@@ -87,11 +94,6 @@ const FormUser = ({open, handleCancelFormUser}) => {
                     onChange={(e) => setRepass(e.target.value)}                 
                 />
             </label>
-
-            <Input 
-                type='submit'
-                value='Enviar'
-                />
                 
         </form>
       </Modal>

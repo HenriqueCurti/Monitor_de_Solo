@@ -1,4 +1,5 @@
 import React, { useDebugValue, useState } from 'react';
+import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -10,15 +11,22 @@ import LoginPage from './components/LoginPage';
 import LogoutPage from './components/LogoutPage';
 import FormCultura from './components/FormCultura';
 import FormUser from './components/FormUser';
+import TableCultura from './components/TableCultura';
+import TableUsuario from './components/TableUsuario';
 
 import { Layout, Menu, Button, theme, Modal } from 'antd';
 const { Header, Sider, Content, Footer } = Layout;
+
+
 
 const App = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [usuario, SetUsuario] = useState('Henrique');
   const [email, setEmail]     = useState('');
-  const [pass, setPass]       = useState('');
+  const [pass, setPass]       = useState('');  
+
+  // cadastro usuário
+  const [name, setName] = useState('');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -28,12 +36,20 @@ const App = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const handleEditUser = (data) =>{
+     setEmail(data.email);
+     setName(data.name);
+     setOpen(true)
+  }
+
   const showModal = (setFunction) => {
     setFunction(true);
   };
 
   const handleCancelFormUser = (value) =>{
     setOpen(value);
+    setEmail('');
+    setName('');
   }
 
   const handleCancelFormCult = (value) =>{
@@ -56,6 +72,10 @@ const App = () => {
         <FormUser 
          open={open}
          handleCancelFormUser={handleCancelFormUser}
+         email={email}
+         name={name}
+         setEmail={setEmail}
+         setName={setName}
          />
       )}
       {openCult && (
@@ -71,7 +91,7 @@ const App = () => {
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={['user']}
+            defaultSelectedKeys={['monitoramento']}
             onClick={(value) =>{
               if(value.key === 'sair'){                
                 showModal(setIsModalOpen)
@@ -153,7 +173,13 @@ const App = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-            Content
+            <BrowserRouter>
+              <Routes>
+                <Route path='/usuarios' element={<TableUsuario handleEditUser={handleEditUser} />}></Route>
+                <Route path='/culturas' element={<TableCultura  />}></Route>
+              </Routes>
+            </BrowserRouter>
+            
           </Content>
           <Footer
             style={{

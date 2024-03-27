@@ -6,6 +6,8 @@ const FormCultura = ({openCult, handleCancelFormCult}) => {
 
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('Content of the modal');
+
+  let jsonCultura;
   
   const [descCultura, setDescCultura] = useState('');
   const [vlrIdeal, setVlrIdeal] = useState(null);
@@ -13,10 +15,10 @@ const FormCultura = ({openCult, handleCancelFormCult}) => {
   const [vlrBaixa, setVlrBaixa] = useState(null);
 
   const handleOk = () => {
-    setModalText('The modal will be closed after two seconds');
+    handleSubmit();
     setConfirmLoading(true);
     setTimeout(() => {
-      setOpen(false);
+      handleCancelFormCult(false);
       setConfirmLoading(false);
     }, 2000);
   };
@@ -25,15 +27,21 @@ const FormCultura = ({openCult, handleCancelFormCult}) => {
     handleCancelFormCult(false)
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(name);
+  const handleSubmit = () => {
+    jsonCultura = {
+      "descCultura": descCultura,
+      "vlrIdeal": vlrIdeal,
+      "vlrAlta": vlrAlta,
+      "vlrBaixa": vlrBaixa
+    }
+
+    console.log(jsonCultura);
   }
 
   return (
     <>
       <Modal
-        title="Cadastro de Usuário"
+        title="Cadastro de Cultura"
         open={openCult}
         onOk={handleOk}
         confirmLoading={confirmLoading}
@@ -48,7 +56,7 @@ const FormCultura = ({openCult, handleCancelFormCult}) => {
                     required
                     name='descCultura'  
                     value={descCultura}
-                    onChange={(e) => setName(e.target.value)}              
+                    onChange={(e) => setDescCultura(e.target.value)}              
                 />
             </label>
 
@@ -60,7 +68,7 @@ const FormCultura = ({openCult, handleCancelFormCult}) => {
                     required
                     name='vlrIdeal' 
                     value={vlrIdeal}
-                    onChange={(e) => setEmail(e.target.value)}                 
+                    onChange={(e) => setVlrIdeal(e.target.value)}                 
                 />
             </label>
 
@@ -72,7 +80,7 @@ const FormCultura = ({openCult, handleCancelFormCult}) => {
                     required
                     name='vlrAlta'  
                     value={vlrAlta}
-                    onChange={(e) => setPass(e.target.value)}                
+                    onChange={(e) => setVlrAlta(e.target.value)}                
                 />
             </label>
 
@@ -84,14 +92,9 @@ const FormCultura = ({openCult, handleCancelFormCult}) => {
                     required
                     name='vlrBaixa' 
                     value={vlrBaixa}
-                    onChange={(e) => setRepass(e.target.value)}                 
+                    onChange={(e) => setVlrBaixa(e.target.value)}                 
                 />
             </label>
-
-            <Input 
-                type='submit'
-                value='Enviar'
-                />
                 
         </form>
       </Modal>
