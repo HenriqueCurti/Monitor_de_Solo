@@ -2,17 +2,13 @@ import React, { useState } from 'react';
 import { Modal, Input } from 'antd';
 
 
-const FormCultura = ({openCult, handleCancelFormCult}) => {
+const FormCultura = ({openCult, handleCancelFormCult, descCultura, setDescCultura, 
+                      vlrIdeal, setVlrIdeal, vlrAlta, setVlrAlta, vlrBaixa, setVlrBaixa}) => {
 
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('Content of the modal');
 
-  let jsonCultura;
-  
-  const [descCultura, setDescCultura] = useState('');
-  const [vlrIdeal, setVlrIdeal] = useState(null);
-  const [vlrAlta, setVlrAlta] = useState(null);
-  const [vlrBaixa, setVlrBaixa] = useState(null);
+  let jsonCultura;  
 
   const handleOk = () => {
     handleSubmit();

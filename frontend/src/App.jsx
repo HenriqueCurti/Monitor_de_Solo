@@ -1,5 +1,5 @@
 import React, { useDebugValue, useState } from 'react';
-import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Routes, useNavigate } from 'react-router-dom';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -25,8 +25,15 @@ const App = () => {
   const [email, setEmail]     = useState('');
   const [pass, setPass]       = useState('');  
 
+  let navigate = useNavigate;
   // cadastro usuário
   const [name, setName] = useState('');
+
+  // cadastro cultura
+  const [descCultura, setDescCultura] = useState('');
+  const [vlrIdeal, setVlrIdeal] = useState(null);
+  const [vlrAlta, setVlrAlta] = useState(null);
+  const [vlrBaixa, setVlrBaixa] = useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -40,6 +47,14 @@ const App = () => {
      setEmail(data.email);
      setName(data.name);
      setOpen(true)
+  }
+
+  const handleEditCultura = (data) => {
+    setDescCultura(data.descCultura);
+    setVlrIdeal(data.vlrIdeal);
+    setVlrAlta(data.vlrAlta);
+    setVlrBaixa(data.vlrBaixa);
+    setOpenCult(true)
   }
 
   const showModal = (setFunction) => {
@@ -62,6 +77,7 @@ const App = () => {
 
   return (
     <>
+    <BrowserRouter>
       {isModalOpen && (
         <LogoutPage 
           isModalOpen={isModalOpen} 
@@ -82,6 +98,14 @@ const App = () => {
         <FormCultura 
         openCult={openCult}
         handleCancelFormCult={handleCancelFormCult}
+        descCultura={descCultura}
+        setDescCultura={setDescCultura}
+        vlrAlta={vlrAlta}
+        setVlrAlta={setVlrAlta}
+        vlrIdeal={vlrIdeal}
+        setVlrIdeal={setVlrIdeal}
+        vlrBaixa={vlrBaixa}
+        setVlrBaixa={setVlrBaixa}
         />
       )}
       {usuario &&(
@@ -110,12 +134,12 @@ const App = () => {
               {
                 key: 'usuarios',
                 icon: <UserOutlined />,
-                label: 'Usuários',
+                label: <Link to={'/usuarios'}>Usuários</Link> ,
               },
               {
                 key: 'culturas',
                 icon: <UserOutlined />,
-                label: 'Culturas',
+                label: <Link to={'/culturas'}>Culturas</Link> ,
               },
               {
                 key: 'cadastro',
@@ -173,12 +197,12 @@ const App = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-            <BrowserRouter>
+            
               <Routes>
                 <Route path='/usuarios' element={<TableUsuario handleEditUser={handleEditUser} />}></Route>
-                <Route path='/culturas' element={<TableCultura  />}></Route>
+                <Route path='/culturas' element={<TableCultura handleEditCultura={handleEditCultura} />}></Route>
               </Routes>
-            </BrowserRouter>
+            
             
           </Content>
           <Footer
@@ -191,7 +215,8 @@ const App = () => {
         </Layout>
       </Layout>
       )} {!usuario && (<LoginPage/>)}        
-    </>
+      </BrowserRouter>
+    </>    
   )
 };
 export default App;
