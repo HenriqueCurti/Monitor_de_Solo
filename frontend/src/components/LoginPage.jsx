@@ -7,7 +7,8 @@ const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
 };
 const LoginPage = () => (
-  <Form
+  <div className="container_login" style={{width: '100%', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+    <Form
     name="basic"
     labelCol={{
       span: 8,
@@ -16,22 +17,24 @@ const LoginPage = () => (
       span: 16,
     }}
     style={{
-      maxWidth: 600
+      width: '100%',
+      maxWidth: 600,
     }}
     initialValues={{
       remember: true,
     }}
     onFinish={onFinish}
     onFinishFailed={onFinishFailed}
-    autoComplete="off"
+    autoComplete="on"
   >
     <Form.Item
-      label="Username"
-      name="username"
+      label="Email"
+      name="email"
+      type="email"
       rules={[
         {
           required: true,
-          message: 'Please input your username!',
+          message: 'Digite seu email',
         },
       ]}
     >
@@ -39,12 +42,13 @@ const LoginPage = () => (
     </Form.Item>
 
     <Form.Item
-      label="Password"
+      label="Senha"
       name="password"
+      type="pass"
       rules={[
         {
           required: true,
-          message: 'Please input your password!',
+          message: 'Digite sua senha',
         },
       ]}
     >
@@ -69,9 +73,11 @@ const LoginPage = () => (
       }}
     >
       <Button type="primary" htmlType="submit">
-        Submit
+        Enviar
       </Button>
     </Form.Item>
   </Form>
+  </div>
+  
 );
 export default LoginPage;

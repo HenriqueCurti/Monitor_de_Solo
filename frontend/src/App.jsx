@@ -5,7 +5,10 @@ import {
   MenuUnfoldOutlined,
   UploadOutlined,
   UserOutlined,
-  VideoCameraOutlined,
+  UserAddOutlined,
+  ScheduleOutlined,
+  FileAddOutlined,
+  FileTextOutlined,
 } from '@ant-design/icons';
 import LoginPage from './components/LoginPage';
 import LogoutPage from './components/LogoutPage';
@@ -24,6 +27,7 @@ const App = () => {
   const [usuario, SetUsuario] = useState('Henrique');
   const [email, setEmail]     = useState('');
   const [pass, setPass]       = useState('');  
+  const [page, setPage]       = useState('MONITORAMENTO DO SOLO');
 
   let navigate = useNavigate;
   // cadastro usuário
@@ -123,13 +127,19 @@ const App = () => {
                 showModal(setOpen)
               }else if (value.key === 'cultura'){
                 showModal(setOpenCult)
+              }else if (value.key === 'culturas'){
+                setPage('CULTURAS')
+              }else if (value.key === 'usuarios'){
+                setPage('USUÁRIOS')
+              }else if (value.key === 'monitoramento'){
+                setPage('MONITORAMENTO DO SOLO')
               };
             }}
             items={[
               {
                 key: 'monitoramento',
-                icon: <UserOutlined />,
-                label: 'Monitoramento',
+                icon: <ScheduleOutlined />,
+                label: <Link to={'/'}>Monitoramento</Link>,
               },
               {
                 key: 'usuarios',
@@ -138,22 +148,22 @@ const App = () => {
               },
               {
                 key: 'culturas',
-                icon: <UserOutlined />,
+                icon: <FileTextOutlined />,
                 label: <Link to={'/culturas'}>Culturas</Link> ,
               },
               {
                 key: 'cadastro',
-                icon: <VideoCameraOutlined />,
+                //icon: <CarelDownOutline />,
                 label: 'Cadastro',
                 type: 'divider',
                 children: [{
                   key: 'cultura',
-                  icon: <UserOutlined />,
+                  icon: <FileAddOutlined />,
                   label: 'Cultura',
                 },
                 {
                   key: 'user',
-                  icon: <UserOutlined />,
+                  icon: <UserAddOutlined />,
                   label: 'Usuário',
                 }]
               },
@@ -186,7 +196,7 @@ const App = () => {
                 height: 64,
               }}            
             />
-            <h2>Monitoramento de Solo</h2>
+            <h2>{page}</h2>
           </Header>
           <Content
             style={{
