@@ -3,17 +3,18 @@ import express from 'express';
 const router = express.Router();
 import UserController from '../controllers/UserController';
 import AuthController from '../controllers/AuthController';
-import { loginrequired, verifyEmail } from '../config/JWT';
 
 router.get('/teste', (req, res) => {
     return res.status(200).json({message: `Bem vindo ao Monitoramento de Umidade de Solo`})
 })
 
-router.post('/users', UserController.store )                      // User Create
-router.get('/users/:id', loginrequired, UserController.busca)     // User Find
+router.post('/api/usuarios', UserController.store )                      // User Create
+router.get('/api/usuarios', UserController.buscaTodos ) 
+router.get('/api/usuarios/:id', UserController.busca)                    // User Find
+router.put('/api/usuarios/:id', UserController.atualizar)                // User Find
+router.delete('/api/usuarios/:id', UserController.deletar)               // User Find
 
-router.post('/login', verifyEmail, AuthController.login);         // User Auth
-router.get('/logout', AuthController.logout)                      // User Auth
-router.get('/user/verify-email', AuthController.verifyemail)      // User Auth
+router.post('/api/login',  AuthController.login);         // User Auth
+router.get('/api/logout', AuthController.logout)                      // User Auth
 
 export default router
