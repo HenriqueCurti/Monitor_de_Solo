@@ -9,7 +9,7 @@ import cookie from 'cookie-parser';
 class AuthController {
     // Login
     async login( req: Request, res: Response) {
-        const { email, password } = req.body;
+        const { email, pass } = req.body;
 
         const user = await UserRepository.findOne( { where: { email } });
 
@@ -17,7 +17,7 @@ class AuthController {
             return res.status(401).json({ Message: `E-mail não cadastrado`});
         }
 
-        const isValidPass = await bcrypt.compare(password, user.password);
+        const isValidPass = await bcrypt.compare(pass, user.pass);
 
         if (!isValidPass){
             return res.status(401).json({ Message: `Acesso Negado`});

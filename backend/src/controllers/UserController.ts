@@ -8,7 +8,7 @@ class UserController {
         const {
             name,
             email,
-            password
+            pass
         } = req.body;
 
         const userExists = await UserRepository.findOne( { where: { email } })
@@ -18,13 +18,13 @@ class UserController {
         }
 
         const salt    = await bcrypt.genSalt(12);
-        const newPass = await bcrypt.hash(password, salt);
+        const newPass = await bcrypt.hash(pass, salt);
 
         try {
             const user = await UserRepository.create({
                 name,
                 email,
-                password: newPass
+                pass: newPass
             })
             await UserRepository.save(user);      
             
@@ -63,7 +63,7 @@ class UserController {
         const {
             name,
             email,
-            password
+            pass
         } = req.body;
 
         const user = await UserRepository.findOne( { where: { idUser } })
@@ -79,14 +79,18 @@ class UserController {
                 return res.status(409).json( {message: `E-mail já cadastrado`})
             }
         }
-    
-        const salt    = await bcrypt.genSalt(12);
-        const newPass = await bcrypt.hash(password, salt);
 
+        let newPass: string;
+
+        if(pass){
+            const salt    = await bcrypt.genSalt(12);
+            newPass = await bcrypt.hash(pass, salt);
+        }   
+        
         try {
-            user.name = name;
-            user.email = email;
-            user.password = newPass;
+            user.name = name?name:user.name;
+            user.email = email?email:user.email;
+            user.pass = newPass?newPass:user.pass;
 
             const newuser = await UserRepository.update(idUser, user)  
 

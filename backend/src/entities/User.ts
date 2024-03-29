@@ -12,7 +12,7 @@ export class User {
     email: string
 
     @Column('varchar', {length: 250})
-    password: string
+    pass: string
 
     @CreateDateColumn({name: 'dataInc'})
     dataInc: Date
