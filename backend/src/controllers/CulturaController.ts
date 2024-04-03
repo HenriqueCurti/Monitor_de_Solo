@@ -54,7 +54,7 @@ class CulturaController {
 
         if(!culturas){
             return res.status(404).json({message: 'Nenhum registro encontrado!'})
-        }
+        }     
 
         return res.status(200).json(culturas)
     }
@@ -72,7 +72,15 @@ class CulturaController {
             return res.status(404).json({message: `Registro não econtrado!`})
         }
 
-        return res.status(200).json(cultura)        
+        const retCultura = {
+            key: cultura.idCultura,
+            descCultura: cultura.descCultura,
+            vlrIdeal: cultura.vlrIdeal,
+            vlrAlta: cultura.vlrAlta,
+            vlrBaixa: cultura.vlrBaixa
+        }
+
+        return res.status(200).json(retCultura)        
     }
 
     async atualizar (req: Request,res: Response){

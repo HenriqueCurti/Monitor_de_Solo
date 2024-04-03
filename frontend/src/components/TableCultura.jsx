@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Space, Table, Tag } from 'antd';
 
 const TableCultura = ({handleEditCultura}) => {
@@ -34,7 +34,56 @@ const TableCultura = ({handleEditCultura}) => {
       ),
     },
   ];
-  const data = [
+  //let [data, setData] = useState([])
+    
+  /*useEffect(() => {
+    fetch('http://localhost:5000/api/culturas', {
+    method: 'GET',
+    headers: {
+      'Context-Type': 'application-json'
+    }
+  }).then(
+    (resp) => {
+      let newData = []
+      resp.json().then(      
+      (json) => {           
+        json.map((v) => {
+          newData.Key = v.idCultura,
+          newData.descCultura = v.descCultura,
+          newData.vlrIdeal = v.vlrIdeal,
+          newData.vlrAlta = v.vlrAlta,
+          newData.vlrBaixa = v.vlrBaixa    
+        })  
+        data = newData; 
+        console.log(data);
+      }  
+    )
+    
+  }
+  ).catch((err) => console.log(err))
+  }) */
+    
+  let json = [];
+  const [data, setData] = useState([])
+
+  async function logMovies() {
+    let newData = [];
+    const response = await fetch('http://localhost:5000/api/culturas');
+    json = await response.json();  
+    newData = json;
+    newData.map((d) => {
+      d.key = d.idCultura;
+      delete d.idCultura;
+    })    
+    setData(newData)
+  }
+
+  useEffect(() => {
+    logMovies()
+  }, json)
+  
+
+  /*const data = [
     {
       key: '1',
       descCultura: 'Alface',
@@ -56,17 +105,15 @@ const TableCultura = ({handleEditCultura}) => {
       vlrBaixa: 200,
       vlrAlta: 800,
     },
-  ];
+  ]; */
 
   const handleDelete = (record) => {
     console.log(record);
 }
 
-
 const handleEdit = (record) => {     
   handleEditCultura(record)    
-}
-
+} 
 
    return <Table columns={columns} dataSource={data} />
 }

@@ -1,0 +1,9 @@
+{
+    "culturas": [{
+        "idCultura": 1,
+        "descCultura": "Alface",
+        "vlrIdeal": 600,
+        "vlrAlta": 800,
+        "vlrBaixa": 400
+    }]
+}

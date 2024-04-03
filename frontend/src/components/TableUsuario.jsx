@@ -1,5 +1,6 @@
 import React from 'react';
 import { Space, Table, Tag } from 'antd';
+import { useState , useEffect} from 'react';
 
 const TableUsuario = ({handleEditUser}) => {
 
@@ -25,7 +26,7 @@ const TableUsuario = ({handleEditUser}) => {
           ),
         },
       ];
-      const data = [
+      /*const data = [
         {
           key: '1',
           name: 'João da Silva',
@@ -37,7 +38,27 @@ const TableUsuario = ({handleEditUser}) => {
           email: 'pedrosouza@email.teste',
         },
       ];
-      
+      */
+
+      let json = [];
+      const [data, setData] = useState([])
+
+      async function logMovies() {
+        let newData = [];
+        const response = await fetch('http://localhost:5000/api/usuarios');
+        json = await response.json();  
+        newData = json;
+        newData.map((d) => {
+          d.key = d.idUser;
+          delete d.idUser;
+        })    
+        console.log(newData);
+        setData(newData)
+      }
+
+      useEffect(() => {
+        logMovies()
+      }, json)
       
       
       const handleDelete = (record) => {
