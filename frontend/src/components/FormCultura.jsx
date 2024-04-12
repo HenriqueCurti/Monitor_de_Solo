@@ -3,7 +3,7 @@ import { Modal, Input } from 'antd';
 
 
 const FormCultura = ({openCult, handleCancelFormCult, descCultura, setDescCultura, 
-                      vlrIdeal, setVlrIdeal, vlrAlta, setVlrAlta, vlrBaixa, setVlrBaixa}) => {
+                      vlrIdeal, setVlrIdeal, vlrAlta, setVlrAlta, vlrBaixa, setVlrBaixa, verb, idCultura}) => {
 
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('Content of the modal');
@@ -20,6 +20,7 @@ const FormCultura = ({openCult, handleCancelFormCult, descCultura, setDescCultur
   };
 
   const handleCancel = () => {
+    console.log(verb);
     handleCancelFormCult(false)
   };
 
@@ -31,7 +32,33 @@ const FormCultura = ({openCult, handleCancelFormCult, descCultura, setDescCultur
       "vlrBaixa": vlrBaixa
     }
 
-    console.log(jsonCultura);
+    cadastrar(verb, jsonCultura);
+
+    async function cadastrar(verbo, data){
+
+      if (verbo == 'POST'){
+        const response = fetch(`http://localhost:5000/api/culturas`, {
+        headers: {
+          "Content-Type": "application/json"
+        },        
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        body: JSON.stringify(data),
+      })
+      } else if (verbo == 'PUT'){
+        console.log(data.key);
+        const response = fetch(`http://localhost:5000/api/culturas/${idCultura}`, {
+        headers: {
+          "Content-Type": "application/json"
+        },        
+        method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        body: JSON.stringify(data),
+      })  
+      }      
+    }
   }
 
   return (

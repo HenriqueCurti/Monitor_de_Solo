@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Input } from 'antd';
 
 
-const FormUser = ({open, handleCancelFormUser, email, setEmail, name, setName}) => {
+const FormUser = ({open, handleCancelFormUser, email, setEmail, name, setName, idUser, verb}) => {
 
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('Content of the modal');  
@@ -15,10 +15,10 @@ const FormUser = ({open, handleCancelFormUser, email, setEmail, name, setName}) 
   const handleOk = () => {
     handleSubmit();    
     setConfirmLoading(true);
-    setTimeout(() => {
-      handleCancel;
+    setTimeout(() => {      
       setConfirmLoading(false);
-    }, 2000);
+    }, 2000)
+    handleCancel();
   };
 
   const handleCancel = () => {
@@ -34,7 +34,32 @@ const FormUser = ({open, handleCancelFormUser, email, setEmail, name, setName}) 
       pass: pass
     }
 
-    console.log(jsonUser);
+    cadastrar(verb, jsonUser);
+
+    async function cadastrar(verbo, data){
+      if(verbo == 'POST'){
+        const response = fetch('http://localhost:5000/api/usuarios', {
+        headers: {
+          "Content-Type": "application/json"
+        },        
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        body: JSON.stringify(data),
+      })
+      } else if(verbo == 'PUT'){
+        const response = fetch(`http://localhost:5000/api/usuarios/${idUser}`, {
+        headers: {
+          "Content-Type": "application/json"
+        },        
+        method: "PUT", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        body: JSON.stringify(data),
+      })
+      }
+      
+    }
   }
 
   return (

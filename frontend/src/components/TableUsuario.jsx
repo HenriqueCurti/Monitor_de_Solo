@@ -2,7 +2,12 @@ import React from 'react';
 import { Space, Table, Tag } from 'antd';
 import { useState , useEffect} from 'react';
 
+import ConfirmationDelete from './ConfirmationDelete';
+
 const TableUsuario = ({handleEditUser}) => {
+
+  const [idUserDelete, setIdUserDelete] = useState(null);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false)
 
     const columns = [
         {
@@ -21,7 +26,7 @@ const TableUsuario = ({handleEditUser}) => {
           render: (_, record) => (
             <Space size="middle">
               <a onClick={() => handleEdit(record)}>Editar </a>
-              <a onClick={() => handleEdit(record.key)}>Excluir</a>
+              <a onClick={() => handleDelete(record.key)}>Excluir</a>
             </Space>
           ),
         },
@@ -61,8 +66,20 @@ const TableUsuario = ({handleEditUser}) => {
       }, json)
       
       
-      const handleDelete = (record) => {
-          console.log(record);
+      const handleDelete = async (id) => {
+         /*const response = await fetch(`http://localhost:5000/api/usuarios/${id}`, {
+          headers: {
+            "Content-Type": "application/json"
+          },        
+          method: "DELETE", // *GET, POST, PUT, DELETE, etc.
+          mode: "cors", // no-cors, *cors, same-origin
+          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        })        
+          console.log(response);
+          logMovies();*/
+
+        setIdUserDelete(id)
+        setIsModalDeleteOpen(true)
       }
 
 
@@ -70,7 +87,29 @@ const TableUsuario = ({handleEditUser}) => {
         console.log(record);
         handleEditUser(record)    
     }
-    return <Table columns={columns} dataSource={data}/>
+
+    const handleDeletar = async () => {
+      const response = await fetch(`http://localhost:5000/api/usuarios/${idUserDelete}`, {
+          headers: {
+            "Content-Type": "application/json"
+          },        
+          method: "DELETE", // *GET, POST, PUT, DELETE, etc.
+          mode: "cors", // no-cors, *cors, same-origin
+          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        })        
+          console.log(response);
+          logMovies();
+    }
+
+
+    return (
+      <>    
+        {isModalDeleteOpen && (
+          <ConfirmationDelete isModalDeleteOpen={isModalDeleteOpen} setIsModalDeleteOpen={setIsModalDeleteOpen} handleDeletar={handleDeletar} />
+        )}
+        <Table columns={columns} dataSource={data}/>
+      </>
+  )
 } 
 
 

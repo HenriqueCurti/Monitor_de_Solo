@@ -27,13 +27,16 @@ const App = () => {
   const [usuario, SetUsuario] = useState('Henrique');
   const [email, setEmail]     = useState('');
   const [pass, setPass]       = useState('');  
+  const [idUser, setIdUser]   = useState(null);
   const [page, setPage]       = useState('MONITORAMENTO DO SOLO');
+  const [verb, setVerb]       = useState('');
 
   let navigate = useNavigate;
   // cadastro usuário
   const [name, setName] = useState('');
 
   // cadastro cultura
+  const [idCultura, setIdCultura] = useState(null);
   const [descCultura, setDescCultura] = useState('');
   const [vlrIdeal, setVlrIdeal] = useState(null);
   const [vlrAlta, setVlrAlta] = useState(null);
@@ -48,16 +51,20 @@ const App = () => {
   } = theme.useToken();
 
   const handleEditUser = (data) =>{
+     setVerb('PUT')
+     setIdUser(data.key);
      setEmail(data.email);
      setName(data.name);
      setOpen(true)
   }
 
   const handleEditCultura = (data) => {
+    setIdCultura(data.key)
     setDescCultura(data.descCultura);
     setVlrIdeal(data.vlrIdeal);
     setVlrAlta(data.vlrAlta);
     setVlrBaixa(data.vlrBaixa);
+    setVerb('PUT');
     setOpenCult(true)
   }
 
@@ -69,10 +76,16 @@ const App = () => {
     setOpen(value);
     setEmail('');
     setName('');
+    setIdUser('')
   }
 
   const handleCancelFormCult = (value) =>{
     setOpenCult(value);
+    setDescCultura('');
+    setVlrIdeal(null);
+    setVlrAlta(null);
+    setVlrBaixa(null);
+    setIdCultura('');
   }
 
   const handleSair = (user) => {
@@ -96,6 +109,9 @@ const App = () => {
          name={name}
          setEmail={setEmail}
          setName={setName}
+         idUser={idUser}
+         verb={verb}
+         navigate={navigate}         
          />
       )}
       {openCult && (
@@ -110,6 +126,8 @@ const App = () => {
         setVlrIdeal={setVlrIdeal}
         vlrBaixa={vlrBaixa}
         setVlrBaixa={setVlrBaixa}
+        verb={verb}
+        idCultura={idCultura}
         />
       )}
       {usuario &&(
@@ -124,8 +142,10 @@ const App = () => {
               if(value.key === 'sair'){                
                 showModal(setIsModalOpen)
               }else if (value.key === 'user'){
+                setVerb('POST');
                 showModal(setOpen)
               }else if (value.key === 'cultura'){
+                setVerb('POST')
                 showModal(setOpenCult)
               }else if (value.key === 'culturas'){
                 setPage('CULTURAS')

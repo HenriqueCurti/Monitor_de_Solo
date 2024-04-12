@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Space, Table, Tag } from 'antd';
 
+import ConfirmationDelete from './ConfirmationDelete';
+
 const TableCultura = ({handleEditCultura}) => {
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false)
+  const [idCultDelete, setIiCultDelete] = useState(null)
+
   const columns = [
     {
       title: 'Descrição',
@@ -107,14 +112,43 @@ const TableCultura = ({handleEditCultura}) => {
     },
   ]; */
 
-  const handleDelete = (record) => {
-    console.log(record);
+  const handleDelete = async (id) => {
+    /*const response = await fetch(`http://localhost:5000/api/culturas/${id}`, {
+      headers: {
+        "Content-Type": "application/json"
+      },        
+      method: "DELETE", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    })        
+      logMovies(); */
+    setIiCultDelete(id);
+    setIsModalDeleteOpen(true)
 }
 
-const handleEdit = (record) => {     
+const handleDeletar = async () => {
+  const response = await fetch(`http://localhost:5000/api/culturas/${idCultDelete}`, {
+      headers: {
+        "Content-Type": "application/json"
+      },        
+      method: "DELETE", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    })        
+      logMovies(); 
+}
+
+const handleEdit = (record) => {   
   handleEditCultura(record)    
 } 
 
-   return <Table columns={columns} dataSource={data} />
+   return (
+    <>    
+      {isModalDeleteOpen && (
+        <ConfirmationDelete isModalDeleteOpen={isModalDeleteOpen} setIsModalDeleteOpen={setIsModalDeleteOpen} handleDeletar={handleDeletar} />
+      )}
+     <Table columns={columns} dataSource={data} />
+    </>
+    )
 }
 export default TableCultura;
