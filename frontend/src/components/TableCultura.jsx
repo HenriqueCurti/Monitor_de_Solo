@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Space, Table, Tag } from 'antd';
+import { Space, Table, Tag, Alert } from 'antd';
 
 import ConfirmationDelete from './ConfirmationDelete';
 
 const TableCultura = ({handleEditCultura}) => {
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false)
   const [idCultDelete, setIiCultDelete] = useState(null)
+  const [message, setMessage] = useState(null);
 
   const columns = [
     {
@@ -39,39 +40,12 @@ const TableCultura = ({handleEditCultura}) => {
       ),
     },
   ];
-  //let [data, setData] = useState([])
-    
-  /*useEffect(() => {
-    fetch('http://localhost:5000/api/culturas', {
-    method: 'GET',
-    headers: {
-      'Context-Type': 'application-json'
-    }
-  }).then(
-    (resp) => {
-      let newData = []
-      resp.json().then(      
-      (json) => {           
-        json.map((v) => {
-          newData.Key = v.idCultura,
-          newData.descCultura = v.descCultura,
-          newData.vlrIdeal = v.vlrIdeal,
-          newData.vlrAlta = v.vlrAlta,
-          newData.vlrBaixa = v.vlrBaixa    
-        })  
-        data = newData; 
-        console.log(data);
-      }  
-    )
-    
-  }
-  ).catch((err) => console.log(err))
-  }) */
     
   let json = [];
   const [data, setData] = useState([])
 
   async function logMovies() {
+    console.log('chamou pelo editar');
     let newData = [];
     const response = await fetch('http://localhost:5000/api/culturas');
     json = await response.json();  
@@ -86,42 +60,15 @@ const TableCultura = ({handleEditCultura}) => {
   useEffect(() => {
     logMovies()
   }, json)
-  
 
-  /*const data = [
-    {
-      key: '1',
-      descCultura: 'Alface',
-      vlrIdeal: 450,
-      vlrBaixa: 300,
-      vlrAlta: 600,
-    },
-    {
-      key: '2',
-      descCultura: 'Almerão',
-      vlrIdeal: 472,
-      vlrBaixa: 260,
-      vlrAlta: 530,
-    },
-    {
-      key: '3',
-      descCultura: 'Rúcula',
-      vlrIdeal: 430,
-      vlrBaixa: 200,
-      vlrAlta: 800,
-    },
-  ]; */
+  useEffect(() => {
+    setTimeout(() => {
+      setMessage(null)
+    }, 3000);
+  }, [message])  
+
 
   const handleDelete = async (id) => {
-    /*const response = await fetch(`http://localhost:5000/api/culturas/${id}`, {
-      headers: {
-        "Content-Type": "application/json"
-      },        
-      method: "DELETE", // *GET, POST, PUT, DELETE, etc.
-      mode: "cors", // no-cors, *cors, same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    })        
-      logMovies(); */
     setIiCultDelete(id);
     setIsModalDeleteOpen(true)
 }
@@ -134,12 +81,17 @@ const handleDeletar = async () => {
       method: "DELETE", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    })        
+    }).then((res) => res = res.json())  
+    .then(data => {
+       setMessage(data.message);
       logMovies(); 
+    })        
+      
 }
 
-const handleEdit = (record) => {   
-  handleEditCultura(record)    
+const handleEdit = async (record) => {   
+  await handleEditCultura(record)
+  logMovies(); 
 } 
 
    return (
@@ -147,6 +99,9 @@ const handleEdit = (record) => {
       {isModalDeleteOpen && (
         <ConfirmationDelete isModalDeleteOpen={isModalDeleteOpen} setIsModalDeleteOpen={setIsModalDeleteOpen} handleDeletar={handleDeletar} />
       )}
+      {message && (
+            <Alert message={message} type="success" />
+          )}
      <Table columns={columns} dataSource={data} />
     </>
     )

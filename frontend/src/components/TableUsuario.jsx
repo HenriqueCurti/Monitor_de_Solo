@@ -1,5 +1,5 @@
 import React from 'react';
-import { Space, Table, Tag } from 'antd';
+import { Space, Table, Tag, Alert } from 'antd';
 import { useState , useEffect} from 'react';
 
 import ConfirmationDelete from './ConfirmationDelete';
@@ -8,6 +8,7 @@ const TableUsuario = ({handleEditUser}) => {
 
   const [idUserDelete, setIdUserDelete] = useState(null);
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false)
+  const [message, setMessage] = useState(null);
 
     const columns = [
         {
@@ -31,19 +32,6 @@ const TableUsuario = ({handleEditUser}) => {
           ),
         },
       ];
-      /*const data = [
-        {
-          key: '1',
-          name: 'João da Silva',
-          email: 'joaosilva@email.teste',
-        },
-        {
-          key: '2',
-          name: 'Pedro de Souza',
-          email: 'pedrosouza@email.teste',
-        },
-      ];
-      */
 
       let json = [];
       const [data, setData] = useState([])
@@ -67,17 +55,6 @@ const TableUsuario = ({handleEditUser}) => {
       
       
       const handleDelete = async (id) => {
-         /*const response = await fetch(`http://localhost:5000/api/usuarios/${id}`, {
-          headers: {
-            "Content-Type": "application/json"
-          },        
-          method: "DELETE", // *GET, POST, PUT, DELETE, etc.
-          mode: "cors", // no-cors, *cors, same-origin
-          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        })        
-          console.log(response);
-          logMovies();*/
-
         setIdUserDelete(id)
         setIsModalDeleteOpen(true)
       }
@@ -96,10 +73,18 @@ const TableUsuario = ({handleEditUser}) => {
           method: "DELETE", // *GET, POST, PUT, DELETE, etc.
           mode: "cors", // no-cors, *cors, same-origin
           cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        })        
-          console.log(response);
-          logMovies();
+        }).then((res) => res = res.json())  
+        .then(data => {
+           setMessage(data.message);
+          logMovies(); 
+        }) 
     }
+
+    useEffect(() => {
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000);
+    }, [message])
 
 
     return (
@@ -107,6 +92,9 @@ const TableUsuario = ({handleEditUser}) => {
         {isModalDeleteOpen && (
           <ConfirmationDelete isModalDeleteOpen={isModalDeleteOpen} setIsModalDeleteOpen={setIsModalDeleteOpen} handleDeletar={handleDeletar} />
         )}
+        {message && (
+            <Alert message={message} type="success" />
+          )}
         <Table columns={columns} dataSource={data}/>
       </>
   )

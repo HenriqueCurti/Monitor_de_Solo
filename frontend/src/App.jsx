@@ -1,5 +1,6 @@
-import React, { useDebugValue, useState } from 'react';
-import { BrowserRouter, Link, Route, Routes, useNavigate } from 'react-router-dom';
+import React, { useDebugValue, useEffect, useState } from 'react';
+import { BrowserRouter, Link, Route, Routes, useNavigate, redirect } from 'react-router-dom';
+
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -16,6 +17,7 @@ import FormCultura from './components/FormCultura';
 import FormUser from './components/FormUser';
 import TableCultura from './components/TableCultura';
 import TableUsuario from './components/TableUsuario';
+import Monitoramento from './components/Monitoramento';
 
 import { Layout, Menu, Button, theme, Modal } from 'antd';
 const { Header, Sider, Content, Footer } = Layout;
@@ -92,6 +94,11 @@ const App = () => {
     SetUsuario(user)
   }
 
+  useEffect( () =>{
+    console.log('chamou redirect');
+    console.log(page);
+  }, [page])
+
   return (
     <>
     <BrowserRouter>
@@ -128,6 +135,7 @@ const App = () => {
         setVlrBaixa={setVlrBaixa}
         verb={verb}
         idCultura={idCultura}
+        setPage={setPage}
         />
       )}
       {usuario &&(
@@ -226,9 +234,9 @@ const App = () => {
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}
-          >
-            
-              <Routes>
+          >            
+              <Routes>                
+                <Route path='/' element={<Monitoramento />}></Route>
                 <Route path='/usuarios' element={<TableUsuario handleEditUser={handleEditUser} />}></Route>
                 <Route path='/culturas' element={<TableCultura handleEditCultura={handleEditCultura} />}></Route>
               </Routes>

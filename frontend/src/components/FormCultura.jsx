@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { Modal, Input } from 'antd';
+import { Modal, Input, Alert } from 'antd';
 
 
-const FormCultura = ({openCult, handleCancelFormCult, descCultura, setDescCultura, 
+const FormCultura = ({openCult, handleCancelFormCult, descCultura, setDescCultura, setPage,
                       vlrIdeal, setVlrIdeal, vlrAlta, setVlrAlta, vlrBaixa, setVlrBaixa, verb, idCultura}) => {
 
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('Content of the modal');
+  const [message, setMessage] = useState(null)
 
   let jsonCultura;  
 
   const handleOk = () => {
-    handleSubmit();
+    handleSubmit()
     setConfirmLoading(true);
     setTimeout(() => {
       handleCancelFormCult(false);
@@ -45,7 +46,13 @@ const FormCultura = ({openCult, handleCancelFormCult, descCultura, setDescCultur
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         body: JSON.stringify(data),
-      })
+      }).then((res) => res = res.json())  
+      .then(data => {
+         setMessage(data.message);
+        <Alert message={message} type="success" />
+      }).then(() => {
+        this.props.history.push('/culturas');
+      });
       } else if (verbo == 'PUT'){
         console.log(data.key);
         const response = fetch(`http://localhost:5000/api/culturas/${idCultura}`, {
@@ -56,13 +63,21 @@ const FormCultura = ({openCult, handleCancelFormCult, descCultura, setDescCultur
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         body: JSON.stringify(data),
-      })  
-      }      
+      }).then((res) => res = res.json())  
+      .then(data => {
+         setMessage(data.message);
+        <Alert message={message} type="success" />
+      }).then(() => {
+        this.props.history.push('/culturas');
+      });
+      }   
+      
+      setPage('CULTURAS');
     }
   }
 
   return (
-    <>
+    <>      
       <Modal
         title="Cadastro de Cultura"
         open={openCult}
@@ -71,6 +86,9 @@ const FormCultura = ({openCult, handleCancelFormCult, descCultura, setDescCultur
         onCancel={handleCancel}
       >
         <form onSubmit={handleSubmit}>
+          {message && (
+            <Alert message={message} type="success" />
+          )}
             <label>
                 Descrição
                 <Input

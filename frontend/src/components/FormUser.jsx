@@ -46,6 +46,10 @@ const FormUser = ({open, handleCancelFormUser, email, setEmail, name, setName, i
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         body: JSON.stringify(data),
+      }).then((res) => res = res.json())  
+      .then(data => {
+         setMessage(data.message);
+        <Alert message={message} type="success" />
       })
       } else if(verbo == 'PUT'){
         const response = fetch(`http://localhost:5000/api/usuarios/${idUser}`, {
@@ -56,6 +60,10 @@ const FormUser = ({open, handleCancelFormUser, email, setEmail, name, setName, i
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         body: JSON.stringify(data),
+      }).then((res) => res = res.json())  
+      .then(data => {
+         setMessage(data.message);
+        <Alert message={message} type="success" />
       })
       }
       
